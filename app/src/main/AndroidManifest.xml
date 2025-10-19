@@ -20,6 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcodeApp">
 
+
+        <!-- Daftar List Opname-->
+        <activity android:name=".OpnameListActivity"
+            android:exported="false" />
+
         <!-- LOGIN: activity pertama yang muncul -->
         <activity
             android:name=".LoginActivity"

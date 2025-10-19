@@ -120,10 +120,15 @@ class MainActivity : AppCompatActivity() {
         // Tombol logout
         val logoutBtn = findViewById<Button>(R.id.logoutBtn)
         logoutBtn.setOnClickListener {
-            session.logout()
+            Toast.makeText(this, "Logout berhasil", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
+//        logoutBtn.setOnClickListener {
+//            session.logout()
+//            val intent = Intent(this, LoginActivity::class.java)
+//            startActivity(intent)
+//            finish()
         }
 
         // Tombol list
@@ -280,6 +285,14 @@ class MainActivity : AppCompatActivity() {
                             "✅ Data berhasil disimpan!",
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        // Tambah ke daftar lokal di tampilan saat ini
+                        opnameList.add(OpnameData(kodeBarang, barcode, nama, qtyoh, qtyop, lokasi))
+                        adapter.notifyItemInserted(opnameList.size - 1)
+
+                        // Simpan juga ke global store (untuk ditampilkan di OpnameListActivity)
+                        OpnameDataStore.add(OpnameData(kodeBarang, barcode, nama, qtyoh, qtyop, lokasi))
+
 
                         // Kosongkan input
                         productStockOPTv.setText("")
