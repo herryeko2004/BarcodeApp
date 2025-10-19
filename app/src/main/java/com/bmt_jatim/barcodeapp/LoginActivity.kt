@@ -15,6 +15,7 @@ class LoginActivity : AppCompatActivity() {
         val usernameEt = findViewById<EditText>(R.id.usernameEt)
         val passwordEt = findViewById<EditText>(R.id.passwordEt)
         val loginBtn = findViewById<Button>(R.id.loginBtn)
+        val session = SessionManager(this)
 
         loginBtn.setOnClickListener {
             val username = usernameEt.text.toString().trim()
@@ -25,15 +26,15 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // sementara hardcode
+            // Cek manual sementara (nanti bisa ganti ke API)
             if (username == "admin" && password == "1234") {
-                Toast.makeText(this, "Login sukses!", Toast.LENGTH_SHORT).show()
+                session.saveLogin(username)
+                Toast.makeText(this, "Selamat datang $username 👋", Toast.LENGTH_SHORT).show()
 
-                // lanjut ke MainActivity
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("USERNAME", username)
                 startActivity(intent)
-                finish() // biar nggak bisa balik ke login lagi
+                finish()
             } else {
                 Toast.makeText(this, "Username atau password salah!", Toast.LENGTH_SHORT).show()
             }

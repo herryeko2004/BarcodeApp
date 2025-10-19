@@ -35,6 +35,17 @@
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
+        <!--Tombol Log Out -->
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="10dp"/>
+
+
         <!-- Tombol Scan -->
         <Button
             android:id="@+id/scanBtn"
@@ -160,6 +171,14 @@
             android:text="💾 Simpan Data"
             android:textColor="#FFFFFF"
             android:layout_marginBottom="20dp" />
+
+        <!-- Tombol List -->
+        <Button
+            android:id="@+id/viewListBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lihat Data Opname"
+            android:layout_marginTop="10dp" />
 
         <!-- Progress Bar -->
         <ProgressBar

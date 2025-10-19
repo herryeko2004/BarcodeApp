@@ -1,6 +1,7 @@
 package com.bmt_jatim.barcodeapp
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -102,8 +103,35 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        val username = intent.getStringExtra("USERNAME")
+//        val username = intent.getStringExtra("USERNAME")
+//        findViewById<TextView>(R.id.userLabelTv)?.text = "Halo, $username!"
+
+        val session = SessionManager(this)
+        if (!session.isLoggedIn()) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+
+        val username = session.getUsername()
         findViewById<TextView>(R.id.userLabelTv)?.text = "Halo, $username!"
+
+        // Tombol logout
+        val logoutBtn = findViewById<Button>(R.id.logoutBtn)
+        logoutBtn.setOnClickListener {
+            session.logout()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        // Tombol list
+        val viewListBtn = findViewById<Button>(R.id.viewListBtn)
+        viewListBtn.setOnClickListener {
+            val intent = Intent(this, OpnameListActivity::class.java)
+            startActivity(intent)
+        }
 
         // Tombol scan
         scanBtn.setOnClickListener {

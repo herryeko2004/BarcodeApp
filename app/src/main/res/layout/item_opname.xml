@@ -1,36 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F2F2F2"
-    android:layout_marginBottom="4dp">
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_margin="6dp"
+    android:background="@android:color/white"
+    android:elevation="3dp"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:layout_weight="1">
 
     <TextView
-        android:id="@+id/kodeTv"
+        android:id="@+id/kodebarangTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kode Barang"
         android:textStyle="bold"
-        android:text="KodeBarang"
-        android:textSize="14sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/namaTv"
+        android:id="@+id/namabarangTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Nama Barang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textSize="13sp" />
 
     <TextView
-        android:id="@+id/qtyTv"
+        android:id="@+id/qtyOPTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="OH: 0 | OP: 0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textSize="12sp"
+        android:textColor="@android:color/holo_blue_dark" />
 
     <TextView
         android:id="@+id/lokasiTv"
-        android:text="Lokasi: Rak"
-        android:textColor="#555555"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lokasi"
         android:textSize="12sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textColor="@android:color/holo_green_dark" />
 </LinearLayout>
