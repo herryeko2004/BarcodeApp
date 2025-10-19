@@ -26,6 +26,15 @@
             android:textColor="#212121"
             android:paddingBottom="20dp" />
 
+        <TextView
+            android:id="@+id/userLabelTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Halo, user!"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
         <!-- Tombol Scan -->
         <Button
             android:id="@+id/scanBtn"
@@ -161,6 +170,21 @@
             android:visibility="gone"
             android:indeterminate="true"
             android:paddingTop="20dp" />
+
+        <!-- Tambahan: daftar hasil opname -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📋 Data Opname Tersimpan"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewOpname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp" />
+
 
     </LinearLayout>
 </ScrollView>

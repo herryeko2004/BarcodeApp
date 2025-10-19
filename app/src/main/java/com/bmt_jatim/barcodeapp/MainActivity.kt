@@ -8,6 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.journeyapps.barcodescanner.CaptureActivity
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -35,6 +38,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var productStockOPTv: EditText
     lateinit var progressBar: ProgressBar
     lateinit var spinner: Spinner
+    // 🆕 Tambahkan di sini (bukan di dalam onCreate)
+    lateinit var recyclerView: RecyclerView
+    lateinit var opnameList: MutableList<OpnameData>
+    lateinit var adapter: OpnameAdapter
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +72,16 @@ class MainActivity : AppCompatActivity() {
         productStockOPTv = findViewById(R.id.productstockopTv)
         progressBar = findViewById(R.id.progressBar)
 
+
+
+        recyclerView = findViewById(R.id.recyclerViewOpname)
+        opnameList = mutableListOf()
+        adapter = OpnameAdapter(opnameList)
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        recyclerView.adapter = adapter
+
+
         // Spinner
         //val spinner = findViewById<Spinner>(R.id.spinnerCombo)
         spinner = findViewById(R.id.spinnerCombo)
@@ -83,6 +101,9 @@ class MainActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
+
+        val username = intent.getStringExtra("USERNAME")
+        findViewById<TextView>(R.id.userLabelTv)?.text = "Halo, $username!"
 
         // Tombol scan
         scanBtn.setOnClickListener {
@@ -133,7 +154,7 @@ class MainActivity : AppCompatActivity() {
             val qtyopText = productStockOPTv.text.toString().trim()
             val lokasi = spinner.selectedItem.toString()
 
-            if (kodebarang.isEmpty() || qtyopText.isEmpty() || lokasi == "Pilih Warehouse") {
+            if (kodebarang.isEmpty() || qtyopText.isEmpty() || lokasi == "Pilih Lokasi") {
                 Toast.makeText(this, "Lengkapi data dulu om 😅", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -238,12 +259,29 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Data berhasil disimpan!", Toast.LENGTH_SHORT).show()
+
+                    // Tambah ke daftar lokal
+                    opnameList.add(
+                        OpnameData(kodeBarang, barcode, nama, qtyoh, qtyop, lokasi)
+                    )
+                    adapter.notifyItemInserted(opnameList.size - 1)
+
+                    // Kosongkan input
+                    productStockOPTv.setText("")
+                    spinner.setSelection(0)
+                }
+
+
                 // Debugging log
                 println("JSON Sent: $jsonBody")
                 println("Response body: $bodyString")
             }
         })
     }
+
+
 
 
     // Fungsi ambil data barang dari API
