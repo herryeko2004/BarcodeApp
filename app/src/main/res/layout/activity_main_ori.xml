@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Tombol Scan -->
+        <Button
+            android:id="@+id/scanBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Scan Barcode" />
+
+        <!-- Input manual kode barang -->
+        <EditText
+            android:id="@+id/productkodeTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Masukkan Kode Barang"
+            android:inputType="text"
+            android:paddingTop="10dp" />
+
+        <!-- Tombol Cari -->
+        <Button
+            android:id="@+id/cariBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Cari Barang" />
+
+        <!-- Hasil scan / info status -->
+        <TextView
+            android:id="@+id/scanResultTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hasil scan akan muncul di sini"
+            android:textSize="18sp"
+            android:paddingTop="20dp"
+            android:textStyle="bold" />
+
+        <!-- Data barang -->
+        <TextView
+            android:id="@+id/productkodebarangTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kode Barang: -"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/productbarcodebarangTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Barcode Barang: -"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/productnameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nama Barang: -"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/productpriceTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Harga: -"
+            android:paddingTop="5dp" />
+
+        <TextView
+            android:id="@+id/productstockohTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stock OH: 0"
+            android:paddingTop="5dp" />
+
+        <TextView
+            android:id="@+id/productsatuanTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Satuan: -"
+            android:paddingTop="5dp" />
+
+        <!-- Pilihan lokasi / rak -->
+        <Spinner
+            android:id="@+id/spinnerCombo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown" />
+
+        <!-- Input stock opname -->
+        <EditText
+            android:id="@+id/productstockopTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:hint="Input Stock Terhitung"
+            android:inputType="number" />
+
+        <!-- Tombol Simpan -->
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Save Data" />
+
+        <!-- ProgressBar untuk loading -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminate="true" />
+
+    </LinearLayout>
+</ScrollView>

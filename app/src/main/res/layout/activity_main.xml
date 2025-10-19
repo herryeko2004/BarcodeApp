@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:context=".MainActivity">
+
+
+        <!-- Judul -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📦 Stok Opname"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:paddingBottom="20dp" />
+
+        <!-- Tombol Scan -->
+        <Button
+            android:id="@+id/scanBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#007AFF"
+            android:text="🔍 Scan Barcode"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="12dp"
+            android:padding="10dp" />
+
+        <!-- Input Kode Barang -->
+        <EditText
+            android:id="@+id/productkodeTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Input Kode Barang"
+            android:padding="10dp"
+            android:background="@android:drawable/edit_text"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Tombol Cari -->
+        <Button
+            android:id="@+id/cariBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#28A745"
+            android:text="Cari Barang"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Hasil Scan -->
+        <TextView
+            android:id="@+id/scanResultTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hasil scan akan muncul di sini"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:paddingTop="10dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginVertical="8dp" />
+
+        <!-- Data Barang -->
+        <TextView
+            android:id="@+id/productkodebarangTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kode Barang: -"
+            android:textColor="#555555"
+            android:paddingTop="6dp" />
+
+        <TextView
+            android:id="@+id/productbarcodebarangTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Barcode Barang: -"
+            android:textColor="#555555"
+            android:paddingTop="6dp" />
+
+        <TextView
+            android:id="@+id/productnameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nama Barang: -"
+            android:textColor="#555555"
+            android:paddingTop="6dp" />
+
+        <TextView
+            android:id="@+id/productpriceTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Harga: -"
+            android:textColor="#555555"
+            android:paddingTop="6dp" />
+
+        <TextView
+            android:id="@+id/productstockohTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stock OH: 0"
+            android:textColor="#555555"
+            android:paddingTop="6dp" />
+
+        <TextView
+            android:id="@+id/productsatuanTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Satuan: -"
+            android:textColor="#555555"
+            android:paddingTop="6dp" />
+
+        <!-- Spinner -->
+        <Spinner
+            android:id="@+id/spinnerCombo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:spinnerMode="dropdown" />
+
+        <!-- Input Stock -->
+        <EditText
+            android:id="@+id/productstockopTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Input Stock Terhitung"
+            android:padding="10dp"
+            android:background="@android:drawable/edit_text"
+            android:layout_marginBottom="15dp" />
+
+        <!-- Tombol Save -->
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF9500"
+            android:text="💾 Simpan Data"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:paddingTop="20dp" />
+
+    </LinearLayout>
+</ScrollView>

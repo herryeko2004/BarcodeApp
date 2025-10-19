@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Izinkan HTTP (cleartext) ke alamat lokal -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">103.175.216.68</domain>
+    </domain-config>
+
+    <!-- Atau bisa juga global (izin semua alamat HTTP di jaringan lokal) -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
