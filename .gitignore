@@ -1,15 +1,54 @@
+# Android Studio
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.idea/
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
 local.properties
+
+# Gradle
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Signing files
+*.jks
+*.keystore
+*.pem
+*.key
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Log & temp
+*.log
+*.tmp
+*.temp
+
+# Android specific
+# Ignore generated files
+/app/release/
+app/release/
+app/debug/
+
+# JetBrains IDE
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Firebase / Google services
+google-services.json
+GoogleService-Info.plist
+
+# Misc
+*.apk
+*.aab
+
+# Kotlin build cache
+.kotlinc/
