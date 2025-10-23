@@ -1,10 +1,12 @@
-package com.bmt_jatim.barcodeapp
+package com.bmt_jatim.barcodeapp.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bmt_jatim.barcodeapp.OpnameData
+import com.bmt_jatim.barcodeapp.R
 
 class OpnameAdapter(private val dataList: MutableList<OpnameData>) :
     RecyclerView.Adapter<OpnameAdapter.ViewHolder>() {

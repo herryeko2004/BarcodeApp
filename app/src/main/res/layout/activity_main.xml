@@ -9,10 +9,10 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:context=".MainActivity">
+        tools:context=".ui.MainActivity">
 
 
         <!-- Judul -->
@@ -133,29 +133,12 @@
             android:paddingTop="6dp" />
 
         <TextView
-            android:id="@+id/productbarcodebarangTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Barcode Barang: -"
-            android:textColor="#555555"
-            android:paddingTop="6dp" />
-
-        <TextView
             android:id="@+id/productnameTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nama Barang: -"
             android:textColor="#555555"
             android:paddingTop="6dp" />
-
-        <TextView
-            android:id="@+id/productpriceTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Harga: -"
-            android:textColor="#555555"
-            android:paddingTop="6dp" />
-
         <TextView
             android:id="@+id/productstockohTv"
             android:layout_width="match_parent"
@@ -189,7 +172,8 @@
             android:hint="Input Stock Terhitung"
             android:padding="10dp"
             android:background="@android:drawable/edit_text"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="15dp"
+            android:inputType="number"/>
 
         <!-- Tombol Save -->
         <Button
