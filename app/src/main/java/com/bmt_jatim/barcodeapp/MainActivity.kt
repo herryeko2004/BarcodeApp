@@ -323,28 +323,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
-    // Fungsi ambil data barang dari API
+    // Fungsi ambil data barang dari API berdasar kdbrg
     private fun fetchBarang(kode: String) {
         val client = OkHttpClient()
         val request = Request.Builder()
-//            .url("https://huriputama.com/api/barang/$kode")
-            .url("http://code91.bmtnujatim.id:8887/api/items/$kode")
-//            .url("http://192.168.1.2:8295/api/items/$kode")
-
+            .url("http://code91.bmtnujatim.id:8887/api/items/kdbrg/$kode")
             .build()
 
         progressBar.visibility = View.VISIBLE
 
         client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                runOnUiThread {
-//                    progressBar.visibility = View.GONE
-//                    Toast.makeText(this@MainActivity, "Gagal konek ke server: ${e.message}", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
                     Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
