@@ -249,6 +249,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val request = Request.Builder()
+            .addHeader("X-API-KEY", "ygv9zKAw08knllyK99OuuR6Us2ODHwe4Voeo6EJ4YGuA7XHNIxKC")
             .url(url)
             .post(requestBody)
             .build()
@@ -327,6 +328,7 @@ class MainActivity : AppCompatActivity() {
     private fun fetchBarang(kode: String) {
         val client = OkHttpClient()
         val request = Request.Builder()
+            .addHeader("X-API-KEY", "ygv9zKAw08knllyK99OuuR6Us2ODHwe4Voeo6EJ4YGuA7XHNIxKC")
             .url("http://code91.bmtnujatim.id:8887/api/items/kdbrg/$kode")
             .build()
 
