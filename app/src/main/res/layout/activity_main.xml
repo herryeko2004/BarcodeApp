@@ -183,7 +183,7 @@
             android:backgroundTint="#FF9500"
             android:text="💾 Simpan Data"
             android:textColor="#FFFFFF"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="2dp" />
 
         <!-- Tombol List -->
         <Button
@@ -191,7 +191,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Lihat Data Opname"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="2dp" />
 
         <!-- Progress Bar -->
         <ProgressBar
