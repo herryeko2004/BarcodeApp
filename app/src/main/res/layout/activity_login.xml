@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center"
+    android:gravity="top"
     android:background="#F5F5F5">
 
     <TextView
@@ -12,7 +12,7 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:layout_marginBottom="32dp"
-        android:gravity="center"
+        android:gravity="top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -43,5 +43,10 @@
         android:layout_marginTop="24dp"
         android:backgroundTint="#00796B"
         android:textColor="#FFFFFF" />
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

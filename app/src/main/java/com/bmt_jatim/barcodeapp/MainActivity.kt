@@ -1,5 +1,6 @@
 package com.bmt_jatim.barcodeapp
 
+import android.R.id.input
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -84,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
 
         // Spinner
-        //val spinner = findViewById<Spinner>(R.id.spinnerCombo)
+
         spinner = findViewById(R.id.spinnerCombo)
 
         val items = listOf("Pilih Lokasi", "Rak", "Gudang")
@@ -99,7 +100,6 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "Kamu pilih: $selectedItem", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
@@ -124,11 +124,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
-//        logoutBtn.setOnClickListener {
-//            session.logout()
-//            val intent = Intent(this, LoginActivity::class.java)
-//            startActivity(intent)
-//            finish()
         }
 
         // Tombol list
@@ -136,6 +131,7 @@ class MainActivity : AppCompatActivity() {
         viewListBtn.setOnClickListener {
             val intent = Intent(this, OpnameListActivity::class.java)
             startActivity(intent)
+            blankbarang()
         }
 
         // Tombol scan
@@ -172,7 +168,7 @@ class MainActivity : AppCompatActivity() {
 
         saveBtn.setOnClickListener {
             val kodebarang = productKodeBarangTv.text.toString()
-                .replace("Kode Barang: ", "")
+                .replace("Kode Barang:", "")
                 .trim()
             val barcode = productBarcodeBarangTv.text.toString()
                 .replace("Barcode Barang: ", "")
@@ -187,10 +183,24 @@ class MainActivity : AppCompatActivity() {
             val qtyopText = productStockOPTv.text.toString().trim()
             val lokasi = spinner.selectedItem.toString()
 
-            if (kodebarang.isEmpty() || qtyopText.isEmpty() || lokasi == "Pilih Lokasi") {
-                Toast.makeText(this, "Lengkapi data dulu om 😅", Toast.LENGTH_SHORT).show()
+            //Notifikasi data tidak lengkap
+            if (kodebarang.isEmpty() ) {
+                Toast.makeText(this, "Scan atau Cari Barang dulu Broo 😅", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            if (lokasi == "Pilih Lokasi") {
+                Toast.makeText(this, "Lengkapi Lokasi Barang dulu Broo 😅", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (qtyopText.isEmpty()) {
+                Toast.makeText(this, "Isi Jumlah Riil Barang dulu Broo 😅", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+//            if (kodebarang.isEmpty() || qtyopText.isEmpty() || lokasi == "Pilih Lokasi") {
+//                Toast.makeText(this, "Lengkapi data dulu om 😅", Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
 
             // Convert qty ke Number (Double)
             val qtyoh = qtyohText.toDoubleOrNull() ?: 0.0
@@ -223,7 +233,7 @@ class MainActivity : AppCompatActivity() {
         lokasi: String
     ) {
         val client = OkHttpClient()
-        val url = "https://code91.bmtnujatim.id:8887/api/opnamecreate"
+        val url = "https://code91.bmtnujatim.id:8887/api/items"
 
         // Pastikan nilai Number tidak null
         val stockOhNum = qtyoh.toDouble()
@@ -293,7 +303,6 @@ class MainActivity : AppCompatActivity() {
                         // Simpan juga ke global store (untuk ditampilkan di OpnameListActivity)
                         OpnameDataStore.add(OpnameData(kodeBarang, barcode, nama, qtyoh, qtyop, lokasi))
 
-
                         // Kosongkan input
                         productStockOPTv.setText("")
                         spinner.setSelection(0)
@@ -302,6 +311,9 @@ class MainActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     Toast.makeText(this@MainActivity, "Data berhasil disimpan!", Toast.LENGTH_SHORT).show()
+
+                    // Simpan juga ke global store (untuk ditampilkan di OpnameListActivity)
+                    OpnameDataStore.add(OpnameData(kodeBarang, barcode, nama, qtyoh, qtyop, lokasi))
 
                     // Tambah ke daftar lokal
                     opnameList.add(
@@ -322,28 +334,46 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
-
+    //Fungsi mengosongkan data di form scan
+    private fun blankbarang() {
+        productKodeBarangTv.text = "Kode Barang:"
+        productBarcodeBarangTv.text = "Barcode Barang: -"
+        productNameTv.text = "Nama Barang: -"
+        productPriceTv.text = "Harga: -"
+        productStockOHTv.text = "Stock IT: 0"
+        productSatuanTv.text = "Satuan: -"
+        productStockOPTv.setText("")
+        productKodeTv.setText("")
+        scanResultTv.setText("Hasil Scan/Cari disini")
+    }
 
     // Fungsi ambil data barang dari API
     private fun fetchBarang(kode: String) {
         val client = OkHttpClient()
+
+        // Deteksi otomatis: barcode atau kode barang
+        val input = scanResultTv.text.toString().trim()
+        val isBarcode = kode.length > 6
+
+        val url = if (isBarcode) {
+            "http://code91.bmtnujatim.id:8887/api/items/$kode"
+        } else {
+            "http://code91.bmtnujatim.id:8887/api/items/kdbrg/$kode"
+        }
+
         val request = Request.Builder()
+            .url(url)
+            .build()
+            
 //            .url("https://huriputama.com/api/barang/$kode")
-            .url("http://code91.bmtnujatim.id:8887/api/items/$kode")
+//            .url("http://code91.bmtnujatim.id:8887/api/items/$kode")
 //            .url("http://192.168.1.2:8295/api/items/$kode")
 
-            .build()
+
 
         progressBar.visibility = View.VISIBLE
 
         client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                runOnUiThread {
-//                    progressBar.visibility = View.GONE
-//                    Toast.makeText(this@MainActivity, "Gagal konek ke server: ${e.message}", Toast.LENGTH_SHORT).show()
-//                }
-//            }
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
@@ -363,8 +393,6 @@ class MainActivity : AppCompatActivity() {
                         return
                     }
 
-//                    val bodyString = response.body?.string()
-//                    if (bodyString.isNullOrEmpty()) return
                     val bodyString = response.body?.string()
                     android.util.Log.d("API_RESPONSE", "Response body: $bodyString")
 
@@ -375,29 +403,22 @@ class MainActivity : AppCompatActivity() {
                         return
                     }
 
-
                     val json = JSONObject(bodyString)
                     val success = json.optBoolean("success", false)
 
                     runOnUiThread {
                         if (success) {
                             val data = json.getJSONObject("data")
-                            productKodeBarangTv.text = "Kode Barang: ${data.optString("kdbrg", "-")}"
+                            productKodeBarangTv.text = "Kode Barang: ${data.optString("kdbrg", "")}"
                             productBarcodeBarangTv.text = "Barcode Barang: ${data.optString("barcode", "-")}"
                             productNameTv.text = "Nama Barang: ${data.optString("nama", "-")}"
                             productPriceTv.text = "Harga: Rp ${data.optString("harga", "0")}"
-                            productStockOHTv.text = "Stock OH: ${data.optString("stock_oh", "0")}"
+                            productStockOHTv.text = "Stock IT: ${data.optString("stock_oh", "0")}"
                             productSatuanTv.text = "Satuan: ${data.optString("satuan", "-")}"
-                            productStockOPTv.setText(data.optString("qtyop", "0"))
+                            productStockOPTv.setText(data.optString("qtyop", ""))
                         } else {
                             Toast.makeText(this@MainActivity, "Barang tidak ditemukan", Toast.LENGTH_SHORT).show()
-                            productKodeBarangTv.text = "Kode Barang: -"
-                            productBarcodeBarangTv.text = "Barcode Barang: -"
-                            productNameTv.text = "Nama Barang: -"
-                            productPriceTv.text = "Harga: -"
-                            productStockOHTv.text = "Stock OH: 0"
-                            productSatuanTv.text = "Satuan: -"
-                            productStockOPTv.setText("0")
+                            blankbarang()
                         }
                     }
                 }
@@ -405,4 +426,5 @@ class MainActivity : AppCompatActivity() {
         })
     }
 }
+
 

@@ -55,24 +55,24 @@
         </LinearLayout>
 
 
-<!--        <TextView-->
-<!--            android:id="@+id/userLabelTv"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Halo, user!"-->
-<!--            android:textSize="18sp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_marginBottom="8dp" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/userLabelTv"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Halo, user!"-->
+        <!--            android:textSize="18sp"-->
+        <!--            android:textStyle="bold"-->
+        <!--            android:layout_marginBottom="8dp" />-->
 
-<!--        &lt;!&ndash;Tombol Log Out &ndash;&gt;-->
-<!--        <Button-->
-<!--            android:id="@+id/logoutBtn"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Logout"-->
-<!--            android:backgroundTint="@android:color/holo_red_light"-->
-<!--            android:textColor="@android:color/white"-->
-<!--            android:layout_marginBottom="10dp"/>-->
+        <!--        &lt;!&ndash;Tombol Log Out &ndash;&gt;-->
+        <!--        <Button-->
+        <!--            android:id="@+id/logoutBtn"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Logout"-->
+        <!--            android:backgroundTint="@android:color/holo_red_light"-->
+        <!--            android:textColor="@android:color/white"-->
+        <!--            android:layout_marginBottom="10dp"/>-->
 
 
         <!-- Tombol Scan -->
