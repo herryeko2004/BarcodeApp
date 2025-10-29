@@ -30,24 +30,42 @@ class WebViewActivity : AppCompatActivity() {
 
         val url = "http://code91.bmtnujatim.id:8887/stock/"
 
-        // Atur WebView
+// Atur WebView
         val webSettings: WebSettings = webView.settings
         webSettings.javaScriptEnabled = true
         webSettings.domStorageEnabled = true
-        webSettings.loadWithOverviewMode = true
         webSettings.useWideViewPort = true
-        webSettings.builtInZoomControls = true
+        webSettings.loadWithOverviewMode = true
+        webSettings.builtInZoomControls = false
         webSettings.displayZoomControls = false
-        webSettings.loadWithOverviewMode = true
-        webSettings.useWideViewPort = true
         webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
-        webView.settings.userAgentString =
-            webView.settings.userAgentString.replace("Mobile", "AndroidApp")
+        webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
+
+        // Tambahan agar skala halaman menyesuaikan layar
+        webView.setInitialScale(1)
+        webView.isHorizontalScrollBarEnabled = false
+        webView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
+
+        // Tambahkan User-Agent yang friendly
+        webSettings.userAgentString =
+            webSettings.userAgentString + " AndroidAppWebView"
 
 
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 progressBar.visibility = View.GONE
+
+                // ✅ Inject meta viewport agar layout web menyesuaikan layar
+                webView.evaluateJavascript(
+                    """
+            if (!document.querySelector('meta[name="viewport"]')) {
+                let meta = document.createElement('meta');
+                meta.name = 'viewport';
+                meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+                document.head.appendChild(meta);
+            }
+            """.trimIndent(), null
+                )
             }
         }
 
