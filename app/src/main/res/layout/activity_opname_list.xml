@@ -2,34 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:title="Daftar Hasil Scan"
-        android:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_arrow_back" />
-
-    <TextView
-        android:id="@+id/titleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Data Opname Tersimpan"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="12dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewOpname"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:padding="8dp"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

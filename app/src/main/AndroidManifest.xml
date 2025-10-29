@@ -50,6 +50,9 @@
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
 
+        <activity android:name=".WebViewActivity" />
+
+
     </application>
 
 </manifest>

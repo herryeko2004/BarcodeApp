@@ -29,6 +29,7 @@ import com.bmt_jatim.barcodeapp.repository.StockOpnameRepository
 import com.bmt_jatim.barcodeapp.model.Barang
 import com.bmt_jatim.barcodeapp.model.StockOpname
 import android.view.WindowManager
+import com.bmt_jatim.barcodeapp.WebViewActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var barangRepo: BarangRepository
@@ -137,6 +138,8 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.viewListBtn).setOnClickListener {
             startActivity(Intent(this, OpnameListActivity::class.java))
+            //startActivity(Intent(this, WebViewActivity::class.java))
+
         }
     }
 
@@ -185,6 +188,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun blankBarang(){
+        productKodeBarangTv.text = "Kode Barang: -"
+        productNameTv.text = "Nama Barang: -"
+        productStockOHTv.text = "Stock OH: -"
+        productSatuanTv.text = "Satuan: -"
+
     }
 
     private fun fetchBarangKdbrg(kdbrg: String) {
@@ -242,6 +253,7 @@ class MainActivity : AppCompatActivity() {
                 if (success) {
                     Toast.makeText(this, "✅ Data opname tersimpan!", Toast.LENGTH_SHORT).show()
                     productStockOPTv.setText("")
+                    blankBarang()
                 } else {
                     Toast.makeText(this, "❌ Gagal menyimpan opname", Toast.LENGTH_SHORT).show()
                 }
