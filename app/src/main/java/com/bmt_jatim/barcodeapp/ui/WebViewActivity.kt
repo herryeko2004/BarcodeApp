@@ -2,14 +2,15 @@ package com.bmt_jatim.barcodeapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.webkit.WebChromeClient
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
+import android.widget.ProgressBar
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 
 class WebViewActivity : AppCompatActivity() {
 
@@ -18,51 +19,57 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         val webView = findViewById<WebView>(R.id.webView)
-        val webSettings: WebSettings = webView.settings
+        val progressBar = findViewById<ProgressBar>(R.id.webProgressBar)
 
-        // 🔧 Aktifkan fitur penting supaya halaman bisa jalan sempurna
+        // Tombol back di toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { finish() }
+
+        val url = "http://code91.bmtnujatim.id:8887/stock/"
+
+        // Atur WebView
+        val webSettings: WebSettings = webView.settings
         webSettings.javaScriptEnabled = true
         webSettings.domStorageEnabled = true
-        webSettings.databaseEnabled = true
-        webSettings.loadsImagesAutomatically = true
-        webSettings.javaScriptCanOpenWindowsAutomatically = true
-        webSettings.cacheMode = WebSettings.LOAD_DEFAULT
-        webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-        webSettings.allowContentAccess = true
-        webSettings.allowFileAccess = true
-        webSettings.setSupportZoom(true)
+        webSettings.loadWithOverviewMode = true
+        webSettings.useWideViewPort = true
         webSettings.builtInZoomControls = true
         webSettings.displayZoomControls = false
+        webSettings.loadWithOverviewMode = true
+        webSettings.useWideViewPort = true
+        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
+        webView.settings.userAgentString =
+            webView.settings.userAgentString.replace("Mobile", "AndroidApp")
 
-        // Agar bisa jalan seperti browser
-        webView.webChromeClient = WebChromeClient()
+
         webView.webViewClient = object : WebViewClient() {
-            override fun onReceivedError(
-                view: WebView,
-                request: WebResourceRequest,
-                error: WebResourceError
-            ) {
-                Toast.makeText(
-                    this@WebViewActivity,
-                    "⚠️ Gagal memuat halaman: ${error.description}",
-                    Toast.LENGTH_SHORT
-                ).show()
+            override fun onPageFinished(view: WebView?, url: String?) {
+                progressBar.visibility = View.GONE
             }
         }
 
-        // 🌐 URL halaman stok opname
-        val url = "http://code91.bmtnujatim.id:8887/stock/"
-        webView.loadUrl(url)
-    }
-
-    // 🔙 Tombol back untuk kembali di dalam WebView
-    override fun onBackPressed() {
-        val webView = findViewById<WebView>(R.id.webView)
-        if (webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                progressBar.visibility = View.VISIBLE
+                progressBar.progress = newProgress
+                if (newProgress == 100) progressBar.visibility = View.GONE
+            }
         }
+
+        webView.loadUrl(url)
+
+        // ✅ handle tombol back HP (cara modern)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (webView.canGoBack()) {
+                    webView.goBack()
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 }

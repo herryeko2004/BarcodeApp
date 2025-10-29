@@ -137,8 +137,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.viewListBtn).setOnClickListener {
-            startActivity(Intent(this, OpnameListActivity::class.java))
-            //startActivity(Intent(this, WebViewActivity::class.java))
+            //startActivity(Intent(this, OpnameListActivity::class.java))
+            startActivity(Intent(this, WebViewActivity::class.java))
 
         }
     }
