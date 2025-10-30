@@ -30,63 +30,67 @@ class WebViewActivity : AppCompatActivity() {
 
         val url = "http://code91.bmtnujatim.id:8887/stock/"
 
-// Atur WebView
-        val webSettings: WebSettings = webView.settings
-        webSettings.javaScriptEnabled = true
-        webSettings.domStorageEnabled = true
-        webSettings.useWideViewPort = true
-        webSettings.loadWithOverviewMode = true
-        webSettings.builtInZoomControls = false
-        webSettings.displayZoomControls = false
-        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
-        webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
+        // 🔧 Pengaturan WebView
+        val settings = webView.settings
+        settings.javaScriptEnabled = true
+        settings.domStorageEnabled = true
+        settings.useWideViewPort = true
+        settings.loadWithOverviewMode = true
+        settings.builtInZoomControls = false
+        settings.displayZoomControls = false
+        settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
+        settings.defaultTextEncodingName = "utf-8"
+        settings.setSupportZoom(false)
 
-        // Tambahan agar skala halaman menyesuaikan layar
-        webView.setInitialScale(1)
+        // 🔧 Pastikan halaman bisa menyesuaikan layar penuh
         webView.isHorizontalScrollBarEnabled = false
-        webView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
+        webView.isVerticalScrollBarEnabled = true
+        webView.scrollBarStyle = WebView.SCROLLBARS_INSIDE_OVERLAY
 
-        // Tambahkan User-Agent yang friendly
-        webSettings.userAgentString =
-            webSettings.userAgentString + " AndroidAppWebView"
-
-
+        // Jika halaman mengandung JS redirect, tetap di WebView
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 progressBar.visibility = View.GONE
 
-                // ✅ Inject meta viewport agar layout web menyesuaikan layar
+                // ✅ Inject viewport & auto zoom supaya 6 kolom muat layar HP
                 webView.evaluateJavascript(
                     """
-            if (!document.querySelector('meta[name="viewport"]')) {
-                let meta = document.createElement('meta');
-                meta.name = 'viewport';
-                meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-                document.head.appendChild(meta);
-            }
+            (function() {
+                // Pastikan ada meta viewport
+                var meta = document.querySelector('meta[name=viewport]');
+                if (!meta) {
+                    meta = document.createElement('meta');
+                    meta.name = 'viewport';
+                    meta.content = 'width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=no';
+                    document.getElementsByTagName('head')[0].appendChild(meta);
+                } else {
+                    meta.setAttribute('content', 'width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=no');
+                }
+                // Skala body agar tabel muat
+                document.body.style.transform = 'scale(0.99)';
+                document.body.style.transformOrigin = '0 0';
+                document.body.style.width = '111%';
+            })();
             """.trimIndent(), null
                 )
             }
         }
 
+
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                progressBar.visibility = View.VISIBLE
+                progressBar.visibility = if (newProgress < 100) View.VISIBLE else View.GONE
                 progressBar.progress = newProgress
-                if (newProgress == 100) progressBar.visibility = View.GONE
             }
         }
 
         webView.loadUrl(url)
 
-        // ✅ handle tombol back HP (cara modern)
+        // 🔙 Tombol back HP
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (webView.canGoBack()) {
-                    webView.goBack()
-                } else {
-                    finish()
-                }
+                if (webView.canGoBack()) webView.goBack()
+                else finish()
             }
         })
     }
