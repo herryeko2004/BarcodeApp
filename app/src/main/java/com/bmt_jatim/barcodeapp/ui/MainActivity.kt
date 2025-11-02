@@ -1,5 +1,6 @@
 package com.bmt_jatim.barcodeapp.ui
 
+import android.util.Log
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
 import com.bmt_jatim.barcodeapp.ui.LoginActivity
 import com.bmt_jatim.barcodeapp.OpnameData
 import com.bmt_jatim.barcodeapp.OpnameListActivity
@@ -29,12 +31,15 @@ import com.bmt_jatim.barcodeapp.repository.StockOpnameRepository
 import com.bmt_jatim.barcodeapp.model.Barang
 import com.bmt_jatim.barcodeapp.model.StockOpname
 import android.view.WindowManager
+import androidx.annotation.Nullable
 import com.bmt_jatim.barcodeapp.WebViewActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var barangRepo: BarangRepository
     private lateinit var stockOpnameRepo: StockOpnameRepository
     private var currentBarang: Barang? = null
+
+    private var currentStockId: Int?=null
 
     // Deklarasi semua view
     private lateinit var scanBtn: Button
@@ -53,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var opnameList: MutableList<OpnameData>
     private lateinit var adapter: OpnameAdapter
     private lateinit var session: SessionManager
+
 
     @SuppressLint("MissingInflatedId")
 
@@ -144,7 +150,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtonActions() {
+
         scanBtn.setOnClickListener {
+            val lokasi = spinner.selectedItem.toString()
+            if (lokasi == "Pilih Lokasi") {
+                Toast.makeText(this, "Isi lokasi dulu om", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val options = ScanOptions()
             options.setPrompt("Arahkan kamera ke barcode")
             options.setBeepEnabled(true)
@@ -154,6 +166,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         cariBtn.setOnClickListener {
+            val lokasi = spinner.selectedItem.toString()
+            if (lokasi == "Pilih Lokasi") {
+                Toast.makeText(this, "Isi lokasi dulu om", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val kdbrg = productKodeTv.text.toString().trim()
             if (kdbrg.isEmpty()) {
                 Toast.makeText(this, "Masukkan kode barang dulu om 😅", Toast.LENGTH_SHORT).show()
@@ -170,51 +188,131 @@ class MainActivity : AppCompatActivity() {
     // Ambil barang dari API
     private fun fetchBarang(kode: String) {
         progressBar.visibility = View.VISIBLE
-        barangRepo.fetchBarang(kode) { barang ->
+        val lokasi = spinner.selectedItem.toString()
+        val warehouse : Int
+        warehouse = if (lokasi == "Rak") 1 else 2
+
+        barangRepo.fetchBarang(kode,warehouse,"") { result ->
             runOnUiThread {
                 progressBar.visibility = View.GONE
-                if (barang != null) {
-                    currentBarang = barang
-                    productKodeBarangTv.text = "Kode Barang: ${barang.kdbrg}"
-                    productNameTv.text = "Nama Barang: ${barang.nama}"
-                    productStockOHTv.text = "Stock OH: ${barang.stock_oh}"
-                    productSatuanTv.text = "Satuan: ${barang.satuan}"
-                } else {
+                if (result == null||result.barang==null) {
                     Toast.makeText(this, "Barang tidak ditemukan", Toast.LENGTH_SHORT).show()
-                    productKodeBarangTv.text = "Kode Barang: -"
-                    productNameTv.text = "Nama Barang: -"
-                    productStockOHTv.text = "Stock OH: -"
-                    productSatuanTv.text = "Satuan: -"
+                    return@runOnUiThread
+                }
+
+                val barang = result.barang
+
+                Log.d("API_DEBUG", "Result body: $result") // 👈 tampil di Logcat
+
+                if(result.alreadyRecorded){
+                    AlertDialog.Builder(this)
+                        .setTitle("Barang sudah direkam stok")
+                        .setMessage("Apakah ingin update data stok ini?")
+                        .setPositiveButton("Update") { _, _ ->
+                            // Lanjut ke mode update
+                            //updateStok(result.stockRecordId!!, barang!!)
+                            currentStockId=result.stockRecordId
+                            currentBarang = barang
+                            productKodeBarangTv.text = "Kode Barang: ${barang.kdbrg}"
+                            productNameTv.text = "Nama Barang: ${barang.nama}"
+                            productStockOHTv.text = "Stock OH: ${barang.stock_oh}"
+                            productSatuanTv.text = "Satuan: ${barang.satuan}"
+                        }
+                        .setNegativeButton("Cancel"){_,_ ->
+                            blankBarang()
+                        }
+                        .show()
+                }else{
+                    if (barang != null) {
+                        currentBarang = barang
+                        productKodeBarangTv.text = "Kode Barang: ${barang.kdbrg}"
+                        productNameTv.text = "Nama Barang: ${barang.nama}"
+                        productStockOHTv.text = "Stock OH: ${barang.stock_oh}"
+                        productSatuanTv.text = "Satuan: ${barang.satuan}"
+                    } else {
+                        Toast.makeText(this, "Barang tidak ditemukan", Toast.LENGTH_SHORT).show()
+                        //productKodeBarangTv.text = "Kode Barang: -"
+                        //productNameTv.text = "Nama Barang: -"
+                        //productStockOHTv.text = "Stock OH: -"
+                        //productSatuanTv.text = "Satuan: -"
+                        blankBarang()
+                    }
                 }
             }
         }
     }
 
     private fun blankBarang(){
+        //productKodeTv.text =""
         productKodeBarangTv.text = "Kode Barang: -"
         productNameTv.text = "Nama Barang: -"
         productStockOHTv.text = "Stock OH: -"
         productSatuanTv.text = "Satuan: -"
+        productKodeTv.setText("")
+        productStockOPTv.setText("")
 
+        currentStockId=null
     }
+
 
     private fun fetchBarangKdbrg(kdbrg: String) {
         progressBar.visibility = View.VISIBLE
-        barangRepo.fetchBarangKdbrg(kdbrg) { barang ->
+        val lokasi = spinner.selectedItem.toString()
+        val warehouse : Int
+        warehouse = if (lokasi == "Rak") 1 else 2
+
+        barangRepo.fetchBarangKdbrg(kdbrg,warehouse,"") { result ->
             runOnUiThread {
                 progressBar.visibility = View.GONE
-                if (barang != null) {
-                    currentBarang = barang
-                    productKodeBarangTv.text = "Kode Barang: ${barang.kdbrg}"
-                    productNameTv.text = "Nama Barang: ${barang.nama}"
-                    productStockOHTv.text = "Stock OH: ${barang.stock_oh}"
-                    productSatuanTv.text = "Satuan: ${barang.satuan}"
-                } else {
-                    Toast.makeText(this, "Barang tidak ditemukan", Toast.LENGTH_SHORT).show()
-                    productKodeBarangTv.text = "Kode Barang: -"
-                    productNameTv.text = "Nama Barang: -"
-                    productStockOHTv.text = "Stock OH: -"
-                    productSatuanTv.text = "Satuan: -"
+
+
+                if (result == null||result.barang==null) {
+                    Toast.makeText(this, "Barang tidak ditemukan1", Toast.LENGTH_SHORT).show()
+                    return@runOnUiThread
+                }
+
+                val barang = result.barang
+                Log.d("API_DEBUG", "Result body: $result") // 👈 tampil di Logcat
+
+                if(result.alreadyRecorded){
+                    AlertDialog.Builder(this)
+                        .setTitle("Barang sudah direkam stok")
+                        .setMessage("Apakah ingin update data stok ini?")
+                        .setPositiveButton("Update") { _, _ ->
+                            // Lanjut ke mode update
+                            //updateStok(result.stockRecordId!!, barang!!)
+                            currentStockId=result.stockRecordId
+
+                            currentBarang = barang
+                            productKodeBarangTv.text = "Kode Barang: ${barang.kdbrg}"
+                            productNameTv.text = "Nama Barang: ${barang.nama}"
+                            productStockOHTv.text = "Stock OH: ${barang.stock_oh}"
+                            productSatuanTv.text = "Satuan: ${barang.satuan}"
+                            scanResultTv.text = "Hasil Pencarian: ${barang.barcode}"
+                        }
+                        .setNegativeButton("Cancel"){_,_ ->
+                            blankBarang()
+                        }
+                        .show()
+                }else{
+                    val barang = result.barang
+                    if (barang != null) {
+
+                        currentBarang = barang
+                        productKodeBarangTv.text = "Kode Barang: ${barang.kdbrg}"
+                        productNameTv.text = "Nama Barang: ${barang.nama}"
+                        productStockOHTv.text = "Stock OH: ${barang.stock_oh}"
+                        productSatuanTv.text = "Satuan: ${barang.satuan}"
+                        scanResultTv.text = "Hasil Pencarian: ${barang.barcode}"
+                        currentStockId=null
+                    } else {
+                        Toast.makeText(this, "Barang tidak ditemukan", Toast.LENGTH_SHORT).show()
+                        //productKodeBarangTv.text = "Kode Barang: -"
+                        //productNameTv.text = "Nama Barang: -"
+                        //productStockOHTv.text = "Stock OH: -"
+                        //productSatuanTv.text = "Satuan: -"
+                        blankBarang()
+                    }
                 }
             }
         }
@@ -240,22 +338,40 @@ class MainActivity : AppCompatActivity() {
             barcode = barang.barcode,
             nama = barang.nama,
             satuan = barang.satuan,
-            warehouse = if (lokasi == "Gudang") 1 else 2,
+            warehouse = if (lokasi == "Rak") 1 else 2,
             nama_operator = session.getUsername() ?: "Anonim",
             stock_oh = barang.stock_oh,
             stock_op = qtyOpText.toIntOrNull() ?: 0
         )
 
         progressBar.visibility = View.VISIBLE
-        stockOpnameRepo.saveOpname(opname) { success ->
-            runOnUiThread {
-                progressBar.visibility = View.GONE
-                if (success) {
-                    Toast.makeText(this, "✅ Data opname tersimpan!", Toast.LENGTH_SHORT).show()
-                    productStockOPTv.setText("")
-                    blankBarang()
-                } else {
-                    Toast.makeText(this, "❌ Gagal menyimpan opname", Toast.LENGTH_SHORT).show()
+        // 👇 kalau currentStockId TIDAK null → update
+        if (currentStockId!=null) {
+            stockOpnameRepo.updateOpname(currentStockId!!, opname) { success ->
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    if (success) {
+                        Toast.makeText(this, "♻️ Data opname berhasil diupdate!", Toast.LENGTH_SHORT).show()
+                        productStockOPTv.setText("")
+                        blankBarang()
+                        currentStockId = 0 // reset biar gak nyangkut
+                    } else {
+                        Toast.makeText(this, "❌ Gagal update opname", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        } else {
+            // 👇 kalau currentStockId null → simpan baru
+            stockOpnameRepo.saveOpname(opname) { success ->
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    if (success) {
+                        Toast.makeText(this, "✅ Data opname tersimpan!", Toast.LENGTH_SHORT).show()
+                        productStockOPTv.setText("")
+                        blankBarang()
+                    } else {
+                        Toast.makeText(this, "❌ Gagal menyimpan opname", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

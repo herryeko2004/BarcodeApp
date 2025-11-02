@@ -51,7 +51,7 @@ class OpnameListActivity : AppCompatActivity() {
         }
 
         // URL Web
-        val url = "http://code91.bmtnujatim.id:8887/stock/"
+        val url = "http://192.168.254.200:822/stock/"
         webView.loadUrl(url)
     }
 

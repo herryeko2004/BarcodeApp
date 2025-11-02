@@ -48,8 +48,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun doLogin(username: String, password: String, session: SessionManager) {
-        val url = "http://code91.bmtnujatim.id:8887/api/login"
-
+        //val url = "http://code91.bmtnujatim.id:8887/api/login"
+        val url = "http://192.168.254.200:822/api/login"
         // 🔥 Body JSON
         val json = JSONObject().apply {
             put("nama", username)

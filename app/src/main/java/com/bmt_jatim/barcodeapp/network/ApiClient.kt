@@ -8,8 +8,8 @@ import okhttp3.RequestBody
 object ApiClient {
 
     private val client = OkHttpClient()
-    private const val BASE_URL = "http://code91.bmtnujatim.id:8887/api/"
-
+    //private const val BASE_URL = "http://192.168.254.200:822/api/"
+    private const val BASE_URL = "http://192.168.254.200:822/api/"
     // 🔹 Fungsi GET
     fun get(endpoint: String, apiKey: String): Request {
         return Request.Builder()

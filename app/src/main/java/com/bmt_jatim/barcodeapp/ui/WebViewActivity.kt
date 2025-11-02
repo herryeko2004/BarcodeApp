@@ -28,7 +28,8 @@ class WebViewActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener { finish() }
 
-        val url = "http://code91.bmtnujatim.id:8887/stock/"
+        // val url = "http://code91.bmtnujatim.id:8887/stock/"
+        val url = "http://192.168.254.200:822/stock/"
 
         // 🔧 Pengaturan WebView
         val settings = webView.settings
